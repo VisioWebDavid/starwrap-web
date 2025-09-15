@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Panel Premium - Polarizados & Wraps</title>
+<style>
+body { margin:0; font-family:'Segoe UI', sans-serif; background:#0a0a0a; color:#fff; }
+header { background:#111; padding:20px; text-align:center; }
+header h1 { color:#ff0000; }
+table { width:90%; margin:auto; border-collapse:collapse; margin-top:30px; }
+th, td { border:1px solid #ff0000; padding:10px; text-align:center; }
+th { background:#1a1a1a; }
+tr:nth-child(even) { background:#222; }
+tr:hover { background:#333; }
+
+button { padding:8px 12px; background:#ff0000; border:none; border-radius:8px; color:#fff; cursor:pointer; transition:.3s; }
+button:hover { background:#cc0000; }
+
+#logoutBtn { position:fixed; top:20px; right:20px; }
+</style>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAgCb5i0yfDtgjcBLPVBXQ2OLlbdgyRdwk",
+  authDomain: "starwrap-f4182.firebaseapp.com",
+  databaseURL: "https://starwrap-f4182-default-rtdb.firebaseio.com",
+  projectId: "starwrap-f4182",
+  storageBucket: "starwrap-f4182.firebasestorage.app",
+  messagingSenderId: "21026144704",
+  appId: "1:21026144704:web:ab1fc277a5c708ec304825",
+  measurementId: "G-PPR8BM56WD"
+};
+
+// Inicializa Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window.addEventListener("DOMContentLoaded", ()=>{
+  const tableBody = document.getElementById("cotizacionesBody");
+  const cotRef = ref(db, "cotizaciones");
+
+  onValue(cotRef, (snapshot)=>{
+    tableBody.innerHTML = "";
+    snapshot.forEach(childSnap => {
+      const data = childSnap.val();
+      const key = childSnap.key;
+      const tr = document.createElement("tr");
+
+      // Nombre
+      const nombreTd = document.createElement("td");
+      nombreTd.innerText = data.nombre || "-";
+      tr.appendChild(nombreTd);
+
+      // Teléfono con link a WhatsApp
+      const telefonoTd = document.createElement("td");
+      telefonoTd.innerHTML = data.telefono ? `<a href="https://wa.me/${data.telefono}" target="_blank">${data.telefono}</a>` : "-";
+      tr.appendChild(telefonoTd);
+
+      // Carro
+      const carroTd = document.createElement("td");
+      carroTd.innerText = data.carro || "-";
+      tr.appendChild(carroTd);
+
+      // Servicio (tipo + detalle)
+      const servicioTd = document.createElement("td");
+      let servicioText = "-";
+      if(data.servicio) servicioText = data.servicio; // Si se guardó desde miniBox
+      else if(data.wrap) servicioText = `Wrap ${data.wrap}`; // Wrap con tipo
+      else if(data.polarizado) servicioText = `Polarizado ${data.polarizado}`; // Polarizado con nivel
+      servicioTd.innerText = servicioText;
+      tr.appendChild(servicioTd);
+
+      // Fecha
+      const fechaTd = document.createElement("td");
+      fechaTd.innerText = data.fecha || "-";
+      tr.appendChild(fechaTd);
+
+      // Acción (solo botón eliminar)
+      const delTd = document.createElement("td");
+      const delBtn = document.createElement("button");
+      delBtn.innerText = "Eliminar";
+      delBtn.addEventListener("click", ()=>{ remove(ref(db, `cotizaciones/${key}`)); });
+      delTd.appendChild(delBtn);
+      tr.appendChild(delTd);
+
+      tableBody.appendChild(tr);
+    });
+  });
+
+  // Botón Cerrar Sesión
+  const logoutBtn = document.getElementById("logoutBtn");
+  logoutBtn.addEventListener("click", ()=>{ window.location.href="index.html"; });
+});
+</script>
+</head>
+<body>
+<header>
+<h1>Panel Premium - Cotizaciones</h1>
+<button id="logoutBtn">Cerrar Sesión</button>
+</header>
+
+<table>
+<thead>
+<tr>
+<th>Nombre</th>
+<th>Teléfono</th>
+<th>Carro</th>
+<th>Servicio</th>
+<th>Fecha</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody id="cotizacionesBody">
+<!-- Datos cargados de Firebase -->
+</tbody>
+</table>
+</body>
+</html>
