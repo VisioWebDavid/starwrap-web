@@ -56,7 +56,7 @@ window.addEventListener("DOMContentLoaded", ()=>{
 
       // Teléfono con link a WhatsApp
       const telefonoTd = document.createElement("td");
-      telefonoTd.innerHTML = data.telefono ? `<a href="https://wa.me/${data.telefono}" target="_blank">${data.telefono}</a>` : "-";
+      telefonoTd.innerHTML = data.telefono ? `<a href="https://wa.me/${52+data.telefono}" target="_blank">${52+data.telefono}</a>` : "-";
       tr.appendChild(telefonoTd);
 
       // Carro
@@ -119,3 +119,4 @@ window.addEventListener("DOMContentLoaded", ()=>{
 </table>
 </body>
 </html>
+
