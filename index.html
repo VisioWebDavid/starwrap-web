@@ -91,13 +91,14 @@ footer { text-align:center; padding:20px; background:#111; color:#888; margin-to
 }
 #trabajoContent {
   display:flex;
+  flex-direction:column;
+  align-items:center;
   background:#1a1a1a;
   border-radius:15px;
   padding:20px 30px;
   max-width:80%;
-  max-height:70%;
-  align-items:center;
-  gap:20px;
+  max-height:80%;
+  gap:15px;
   box-shadow:0 10px 40px rgba(255,0,0,0.3);
   transform:scale(0.8);
   animation: scaleUp 0.4s ease forwards;
@@ -113,8 +114,8 @@ footer { text-align:center; padding:20px; background:#111; color:#888; margin-to
 #trabajoContent img:hover { transform:scale(1.05); }
 #trabajoContent p {
   color:#fff;
-  font-size:1.2rem;
-  max-width:400px;
+  font-size:1.1rem;
+  text-align:center;
   overflow-y:auto;
   line-height:1.4;
   text-shadow:0 0 5px #ff0000;
@@ -138,6 +139,29 @@ footer { text-align:center; padding:20px; background:#111; color:#888; margin-to
 
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 @keyframes scaleUp { from { transform:scale(0.8); } to { transform:scale(1); } }
+
+/* Mini modal de confirmación */
+#miniModal {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  backdrop-filter:blur(4px);
+  justify-content:center;
+  align-items:center;
+  z-index:1001;
+  animation: fadeIn 0.3s ease forwards;
+}
+#miniModalContent {
+  background:#1a1a1a;
+  padding:25px 40px;
+  border-radius:15px;
+  text-align:center;
+  color:#ff0000;
+  font-size:1.2rem;
+  box-shadow:0 5px 20px rgba(255,0,0,0.5);
+  animation: scaleUp 0.3s ease forwards;
+}
 </style>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
@@ -157,7 +181,6 @@ const firebaseConfig = {
 
 // Inicializa Firebase
 const app = initializeApp(firebaseConfig);
-
 const db = getDatabase(app);
 
 window.addEventListener("DOMContentLoaded", ()=>{
@@ -185,7 +208,12 @@ window.addEventListener("DOMContentLoaded", ()=>{
       fecha: new Date().toLocaleDateString()
     };
     push(ref(db, "cotizaciones"), data);
-    alert("✅ Tu cotización ha sido enviada");
+
+    // Mostrar mini modal animado
+    const miniModal = document.getElementById("miniModal");
+    miniModal.style.display = "flex";
+    setTimeout(()=>{ miniModal.style.display="none"; }, 2500);
+
     form.reset();
     servicioSeleccionadoDiv.innerHTML = '';
     selectedService = "";
@@ -301,8 +329,15 @@ window.addEventListener("DOMContentLoaded", ()=>{
 </form>
 </section>
 
+<div id="miniModal">
+<div id="miniModalContent">
+✅ Tus datos fueron enviados. Nos contactaremos contigo lo antes posible.
+</div>
+</div>
+
 <footer>
 <p>© 2025 StarWrap Culiacán</p>
 </footer>
 </body>
 </html>
+
