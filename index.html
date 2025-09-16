@@ -227,9 +227,9 @@ window.addEventListener("DOMContentLoaded", ()=>{
   adminModal.addEventListener("click", (e)=>{ if(e.target===adminModal) adminModal.style.display="none"; });
   adminLoginForm.addEventListener("submit", (e)=>{
     e.preventDefault(); 
-    if(adminLoginForm.password.value === "StarwrapFercho2007"){ 
+    if(adminLoginForm.email.value === "artedecorativa21@hotmail.com" && adminLoginForm.password.value === "Veg@191421"){ 
       window.location.href = "premium.html"; 
-    } else { alert("❌ Contraseña incorrecta"); }
+    } else { alert("❌ Correo o contraseña incorrectos"); }
   });
 
   // Trabajos Realizados Modal
@@ -268,7 +268,7 @@ window.addEventListener("DOMContentLoaded", ()=>{
 <div id="adminModal">
 <form id="adminLoginForm">
 <h3>Login Jefe</h3>
-<label>Correo <input type="email" name="email" required></label>
+<label>Correo <input type="email" name="email" value="artedecorativa21@hotmail.com" required></label>
 <label>Contraseña <input type="password" name="password" required></label>
 <button type="submit">Entrar</button>
 </form>
@@ -340,5 +340,6 @@ window.addEventListener("DOMContentLoaded", ()=>{
 </footer>
 </body>
 </html>
+
 
 
